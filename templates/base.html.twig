@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+    <title>My Biking App - {% block title %}{% endblock %}</title>
+        {{ include('_favicons.html.twig', with_context = false) }}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        {% block header -%}
+            {{ include('_header.html.twig', {'currentRoute': app.request.attributes.get('_route')}, with_context = false) }}
+        {%- endblock %}
+
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </body>
+</html>
