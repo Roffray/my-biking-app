@@ -1,5 +1,7 @@
 var Encore = require('@symfony/webpack-encore');
 
+var path = require('path');
+
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
@@ -14,6 +16,10 @@ Encore
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
 
+    .addAliases({
+        'leaflet': path.resolve(__dirname, 'node_modules/leaflet/dist')
+    })
+
     /*
      * ENTRY CONFIG
      *
@@ -24,6 +30,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
+    .addEntry('leaflet', './assets/js/leaflet.js')
     // Green theme vendors
     //.addEntry('owl.carousel', './assets/vendor/owl.carousel/owl.carousel.js')
 
