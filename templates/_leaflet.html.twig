@@ -6,39 +6,57 @@
 <div id="map" style="height:500px;"></div>
 
 <script type="text/javascript">
-    var map = L.map('map').setView([51.505, -0.09], 13);
 
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    // }).addTo(map);
-    //
-    // L.marker([51.5, -0.09]).addTo(map)
-    //     .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-    //     .openPopup();
+    function initializeMap(latitude, longitude) {
+        var latitude = typeof latitude != null ? latitude : 48.856614;
+        var longitude = typeof longitude != null ? longitude : 2.3522219;
+        var map = L.map('map').setView([latitude, longitude], 13);
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        // id: 'mapbox/outdoors-v11',
-        id: 'roffray/ckdlynzgl2ky11io6knbwbaqb',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: '{{ mapbox_access_token }}'
-    }).addTo(map);
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(map);
+        //
+        // L.marker([latitude, longitude]).addTo(map)
+        //     .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+        //     .openPopup();
 
-    var geojsonFeature = {
-        "type": "Feature",
-        "properties": {
-            "name": "Coors Field",
-            "amenity": "Baseball Stadium",
-            "popupContent": "This is where the Rockies play!"
-        },
-        "geometry": {
-            "type": "Point",
-            // "coordinates": [-104.99404, 39.75621]
-            "coordinates": [51.505, -0.09]
-        }
-    };
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: '&copy; Roffray | Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            // id: 'mapbox/outdoors-v11',
+            id: 'roffray/ckdlynzgl2ky11io6knbwbaqb',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: '{{ mapbox_access_token }}'
+        }).addTo(map);
 
-    L.geoJSON(geojsonFeature).addTo(map);
+        // var geojsonFeature = {
+        //     "type": "Feature",
+        //     "properties": {
+        //         "name": "Coors Field",
+        //         "amenity": "Baseball Stadium",
+        //         "popupContent": "This is where the Rockies play!"
+        //     },
+        //     "geometry": {
+        //         "type": "Point",
+        //         // "coordinates": [-104.99404, 39.75621]
+        //         "coordinates": [51.505, -0.09]
+        //     }
+        // };
+        //
+        // L.geoJSON(geojsonFeature).addTo(map);
+    }
+
+    if ("geolocation" in navigator) {
+        let geo_options = {
+            enableHighAccuracy: true,
+            maximumAge        : 30000,
+            timeout           : 27000
+        };
+        navigator.geolocation.getCurrentPosition(function(position, geo_options) {
+            initializeMap(position.coords.latitude, position.coords.longitude);
+        });
+    } else {
+        initializeMap();
+    }
 </script>
