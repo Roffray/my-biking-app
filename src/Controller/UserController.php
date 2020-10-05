@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\RegistrationFormType;
+use App\Form\RegistrationType;
 use App\User\RegistrationHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ class UserController extends AbstractController
      */
     public function register(Request $request): Response
     {
-        $form = $this->createForm(RegistrationFormType::class);
+        $form = $this->createForm(RegistrationType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
