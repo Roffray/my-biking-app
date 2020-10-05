@@ -3,4 +3,6 @@ twig:
     form_themes: ['bootstrap_4_layout.html.twig']
 
     globals:
+        app_name: '%app.name%'
+        app_locales: '%app.locales%'
         mapbox_access_token: pk.eyJ1Ijoicm9mZnJheSIsImEiOiJja2RseThiemMxM2ZiMnhsY2NvM3F3MWFqIn0.UtRoCWfEw5e7LU_CxQSu-A

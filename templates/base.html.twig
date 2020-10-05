@@ -2,23 +2,41 @@
 <html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8">
-    <title>My Biking App - {% block title %}{% endblock %}</title>
+    <title>{{ app_name }} - {% block title %}{% endblock %}</title>
         {{ include('_favicons.html.twig', with_context = false) }}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
     <body>
+    {% block body %}
         {% block header -%}
             {{ include('_header.html.twig', {'currentRoute': app.request.attributes.get('_route')}, with_context = false) }}
         {%- endblock %}
 
-        <div class="container">
-            {% block body %}{% endblock %}
+        {# TODO: change this alert handle #}
+        {% for type, messages_by_type in app.flashes %}
+            <div class="alert alert-{{ type }}" role="alert">
+                {% if messages_by_type|length < 2 %}
+                    {{ messages_by_type|first }}
+                {% else %}
+                    <ul>
+                        {% for message in messages_by_type %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div class="container-fluid">
+            {% block page_content %}
+            {% endblock %}
         </div>
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+    {% endblock %}
     </body>
 </html>
