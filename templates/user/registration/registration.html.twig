@@ -6,38 +6,38 @@
     <h1 class="h3 my-3 font-weight-normal d-flex justify-content-center">{{ 'signup'|trans|capitalize }}</h1>
 
     {{ form_start(form) }}
-        <div class="row form-group form-inline justify-content-md-center">
-            <div class="col-md-4">
+        <div class="row form-group justify-content-md-center">
+            <div class="col-md-2">
                 {{ form_label(form.email, null) }}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 {{ form_widget(form.email, {'attr': {'class': 'form-control form-control-sm'}}) }}
             </div>
         </div>
 
-        <div class="row form-group form-inline justify-content-md-center">
-            <div class="col-md-4">
+        <div class="row form-group justify-content-md-center">
+            <div class="col-md-2">
                 {{ form_label(form.name, null) }}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-sm'}}) }}
             </div>
         </div>
 
-        <div class="row form-group form-inline justify-content-md-center">
-            <div class="col-md-4">
+        <div class="row form-group justify-content-md-center">
+            <div class="col-md-2">
                 {{ form_label(form.password.first, null) }}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 {{ form_widget(form.password.first, {'attr': {'class': 'form-control form-control-sm'}}) }}
             </div>
         </div>
 
-        <div class="row form-group form-inline justify-content-md-center">
-            <div class="col-md-4">
+        <div class="row form-group justify-content-md-center">
+            <div class="col-md-2">
                 {{ form_label(form.password.second, null) }}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 {{ form_widget(form.password.second, {'attr': {'class': 'form-control form-control-sm'}}) }}
             </div>
         </div>
