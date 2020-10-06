@@ -6,3 +6,12 @@ menu.contact: Contact
 email_contact_sent_success: Email successfully sent, we will respond to you shortly.
 languages.en: english
 languages.fr: french
+mail.contact.title: Incoming message from
+form.label.name: Name
+form.label.username: Username
+form.label.firstname: Firstname
+form.label.password: Password
+form.label.password_repeat: Repeat your password
+form.label.submit: Submit
+signup: sign up
+signin: sign in

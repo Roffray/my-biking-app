@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/user", name="user_")
@@ -16,10 +17,15 @@ class UserController extends AbstractController
 {
     /** @var RegistrationHandler */
     private $registrationHandler;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
 
-    public function __construct(RegistrationHandler $registrationHandler)
+    public function __construct(RegistrationHandler $registrationHandler, TranslatorInterface $translator)
     {
         $this->registrationHandler = $registrationHandler;
+        $this->translator = $translator;
     }
 
     /**
@@ -33,7 +39,8 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->registrationHandler->handle($form->getData());
 
-            $this->addFlash('info', 'Welcome to My Biking App ! Please check your emails to activate your account.');
+            $this->addFlash('info', $this->translator->trans('registration_success', ['app_name' => 'My Biking App']));
+
             return $this->redirectToRoute("home");
         }
 

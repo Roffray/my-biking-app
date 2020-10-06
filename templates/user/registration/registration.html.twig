@@ -3,7 +3,7 @@
 {% block title 'Sign up' %}
 
 {% block page_content %}
-    <h1 class="h3 my-3 font-weight-normal d-flex justify-content-center">Sign up</h1>
+    <h1 class="h3 my-3 font-weight-normal d-flex justify-content-center">{{ 'signup'|trans|capitalize }}</h1>
 
     {{ form_start(form) }}
         <div class="row form-group form-inline justify-content-md-center">
@@ -44,7 +44,7 @@
 
         <div class="d-flex justify-content-center">
             <button class="btn btn-md btn-outline-primary mt-2" type="submit">
-                Sign up
+                {{ 'signup'|trans|capitalize }}
             </button>
         </div>
     {{ form_end(form) }}
