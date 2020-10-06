@@ -9,7 +9,7 @@ parameters:
     app.locales: ['en', 'fr']
     emails.admin: 'geoffray.veyssie@gmail.com'
     emails.no_reply: 'no-reply@mybikingapp.com'
-    app.name: My biking app
+    app.name: 'My biking app'
 
 services:
     # default configuration for services in *this* file

@@ -39,7 +39,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->registrationHandler->handle($form->getData());
 
-            $this->addFlash('info', $this->translator->trans('registration_success', ['app_name' => 'My Biking App']));
+            $this->addFlash('info', $this->translator->trans('registration_success', ['app_name' => $this->getParameter('app.name')]));
 
             return $this->redirectToRoute("home");
         }
