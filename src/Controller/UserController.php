@@ -30,9 +30,15 @@ class UserController extends AbstractController
 
     /**
      * @Route("/registration", name="registration", methods={"GET", "POST"})
+     * @param Request $request
+     * @return Response
      */
     public function register(Request $request): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('home');
+        }
+
         $form = $this->createForm(RegistrationType::class);
         $form->handleRequest($request);
 
