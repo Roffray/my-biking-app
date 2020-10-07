@@ -1,1 +1,3 @@
 form.error.passwords_mismatch: Les mots de passe doivent être identiques.
+registration.used.email: L'adresse email {{ value }} est déjà utilisée
+registration.used.name: Le nom {{ value }} est déjà utilisé
