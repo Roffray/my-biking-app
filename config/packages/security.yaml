@@ -24,6 +24,7 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+            user_checker: App\Security\UserChecker
             # custom_authenticators:
             #     - App\Security\LoginFormAuthenticator
             logout:
