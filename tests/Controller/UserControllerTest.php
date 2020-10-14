@@ -86,7 +86,7 @@ class UserControllerTest extends WebTestCase
 
         $client->request(Request::METHOD_GET, '/en/user/registration');
 
-        self::assertEquals(302, $client->getResponse()->getStatusCode());
+        self::assertResponseStatusCodeSame($client->getResponse()->getStatusCode());
 
         $client->followRedirect();
 
