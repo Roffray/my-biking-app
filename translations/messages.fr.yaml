@@ -3,15 +3,22 @@ menu.login: Se connecter
 menu.logout: Se deconnecter
 menu.account: Mon compte
 menu.contact: Contact
-email_contact_sent_success: Email envoyé avec succes, nous allons faire notre possible pour vous répondre rapidement.
+
 languages.en: anglais
 languages.fr: français
-mail.contact.title: Message reçu de
+
 form.label.name: Nom
 form.label.username: Identifiant
 form.label.firstname: Prénom
 form.label.password: Mot de passe
 form.label.password_repeat: Répetez votre mot de passe
 form.label.submit: Envoyer
-signup: s'enregistrer
-signin: se connecter
+form.label.email: Email
+form.label.message: Message
+
+email_contact_sent_success: Email envoyé avec succes, nous allons faire notre possible pour vous répondre rapidement.
+mail.contact.title: Message reçu de
+
+signup: S'enregistrer
+signin: Se connecter
+contact: Contact

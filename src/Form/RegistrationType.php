@@ -21,7 +21,11 @@ class RegistrationType extends AbstractType
                 'attr'  => ['placeholder' => 'form.label.username']
             ])
             ->add('email', EmailType::class, [
-                'attr'  => ['placeholder' => 'Email', 'maxLength' => '180']
+                'label' => 'form.label.email',
+                'attr'  => [
+                    'placeholder' => 'form.label.email',
+                    'maxLength' => '180'
+                ]
             ])
             ->add('password', RepeatedType::class, [
                 'type'              => PasswordType::class,
