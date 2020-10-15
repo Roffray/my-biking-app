@@ -21,6 +21,7 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 // class LoginFormAuthenticator extends AbstractAuthenticator implements PasswordAuthenticatedInterface
@@ -33,13 +34,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->translator = $translator;
     }
 
     public function supports(Request $request): ?bool
@@ -74,7 +80,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Email could not be found.');
+            throw new CustomUserMessageAuthenticationException($this->translator->trans('user.message.email_not_fount'));
         }
 
         return $user;
