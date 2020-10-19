@@ -16,10 +16,8 @@ class UserFixtures extends Fixture
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
         foreach ($this->provideUsers() as [$name, $email, $role, $password, $isActive]) {
             $user = new User();
 
