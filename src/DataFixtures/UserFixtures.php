@@ -20,7 +20,7 @@ class UserFixtures extends Fixture
     {
         // $product = new Product();
         // $manager->persist($product);
-        foreach ($this->provideUsers() as [$name, $email, $role, $password]) {
+        foreach ($this->provideUsers() as [$name, $email, $role, $password, $isActive]) {
             $user = new User();
 
             $user
@@ -31,7 +31,7 @@ class UserFixtures extends Fixture
                     $user,
                     $password
                 ))
-                ->setisActive(true)
+                ->setisActive($isActive)
             ;
 
             $manager->persist($user);
@@ -46,21 +46,25 @@ class UserFixtures extends Fixture
     private function provideUsers(): array
     {
         $junior = [
-            'User Junior', 'junior@mybikingapp.fr', 'ROLE_USER', 'junior',
+            'User Junior', 'junior@mybikingapp.fr', 'ROLE_USER', 'junior', true,
         ];
 
         $senior = [
-            'User Senior', 'senior@mybikingapp.fr', 'ROLE_USER', 'senior',
+            'User Senior', 'senior@mybikingapp.fr', 'ROLE_USER', 'senior', true,
         ];
 
         $admin = [
-            'Admin', 'admin@mybikingapp.fr', 'ROLE_ADMIN', 'admin',
+            'Admin', 'admin@mybikingapp.fr', 'ROLE_ADMIN', 'admin', true,
         ];
 
         $superAdmin = [
-            'Super Admin', 'superadmin@mybikingapp.fr', 'ROLE_SUPER_ADMIN', 'superadmin',
+            'Super Admin', 'superadmin@mybikingapp.fr', 'ROLE_SUPER_ADMIN', 'superadmin', true,
         ];
 
-        return [$junior, $senior, $admin, $superAdmin];
+        $inactive = [
+            'User inactive', 'inactive@mybikingapp.fr', 'ROLE_USER', 'inactive', false,
+        ];
+
+        return [$junior, $senior, $admin, $superAdmin, $inactive];
     }
 }
