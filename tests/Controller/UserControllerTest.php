@@ -33,10 +33,12 @@ class UserControllerTest extends WebTestCase
         }
 
         $client->followRedirect();
+
+        self::assertRouteSame('home');
         self::assertSelectorExists('.alert-info');
     }
 
-    public function testRegister_EmailAlreadyExists(): void
+    public function testRegister_emailAlreadyExists(): void
     {
         $client = self::createClient();
 
@@ -55,7 +57,7 @@ class UserControllerTest extends WebTestCase
         self::assertSelectorExists('.form-error-message');
     }
 
-    public function testRegister_NameAlreadyExists(): void
+    public function testRegister_nameAlreadyExists(): void
     {
         $client = self::createClient();
 
@@ -74,7 +76,7 @@ class UserControllerTest extends WebTestCase
         self::assertSelectorExists('.form-error-message');
     }
 
-    public function testResiter_afterLogin(): void
+    public function testRegister_afterLogin(): void
     {
         $client = self::createClient();
 
@@ -86,7 +88,7 @@ class UserControllerTest extends WebTestCase
 
         $client->request(Request::METHOD_GET, '/en/user/registration');
 
-        self::assertResponseStatusCodeSame($client->getResponse()->getStatusCode());
+        self::assertResponseStatusCodeSame(302);
 
         $client->followRedirect();
 
