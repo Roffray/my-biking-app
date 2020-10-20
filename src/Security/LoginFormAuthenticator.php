@@ -80,7 +80,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException($this->translator->trans('user.message.email_not_fount'));
+            throw new CustomUserMessageAuthenticationException($this->translator->trans('user.message.email_not_found'));
         }
 
         return $user;

@@ -17,7 +17,7 @@ form.label.email: Email
 form.label.message: Message
 
 user.message.inactive: Your account have been deactivated. You cannot log in.
-user.message.email_not_fount: Email could not be found.
+user.message.email_not_found: Email could not be found.
 
 email_contact_sent_success: Email successfully sent, we will respond to you shortly.
 mail.contact.title: Incoming message from
