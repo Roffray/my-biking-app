@@ -25,3 +25,5 @@ mail.contact.title: Incoming message from
 signup: Sign up
 signin: Sign in
 contact: Contact
+exit_impersonation: Exit impersonation
+warning_impersonation: You are currently switched to this user.

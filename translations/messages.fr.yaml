@@ -25,3 +25,5 @@ mail.contact.title: Message reçu de
 signup: S'enregistrer
 signin: Se connecter
 contact: Contact
+exit_impersonation: Quitter l'impersonation
+warning_impersonation: Vous impersonifiez actuellement cet utilisateur.
