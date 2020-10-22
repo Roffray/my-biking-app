@@ -19,6 +19,8 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $i = 0;
+
         foreach ($this->provideUsers() as [$name, $email, $role, $password, $isActive]) {
             $user = new User();
 
@@ -41,6 +43,8 @@ class UserFixtures extends Fixture
 
             $manager->persist($apiToken);
             $manager->persist($user);
+
+            $this->addReference(User::class.'_'.$i++, $user);
         }
 
         $manager->flush();
