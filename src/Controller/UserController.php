@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Form\RegistrationType;
 use App\User\RegistrationHandler;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @Route("/user", name="user_")
  */
-class UserController extends AbstractController
+class UserController extends BaseController
 {
     /** @var RegistrationHandler */
     private $registrationHandler;
