@@ -86,13 +86,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $user;
     }
 
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     * @param $credentials
+     * @return string|null
      */
     public function getPassword($credentials): ?string
     {
@@ -111,7 +113,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return new RedirectResponse($this->urlGenerator->generate('home'));
     }
 
-    protected function getLoginUrl()
+    protected function getLoginUrl(): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
