@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SecurityControllerTest extends WebTestCase
 {
@@ -96,7 +97,7 @@ class SecurityControllerTest extends WebTestCase
 
         $client->request(Request::METHOD_GET, '/en/login');
 
-        self::assertResponseStatusCodeSame(302);
+        self::assertResponseStatusCodeSame(Response::HTTP_FOUND);
 
         $client->followRedirect();
 
