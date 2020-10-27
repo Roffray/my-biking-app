@@ -27,3 +27,5 @@ signin: Se connecter
 contact: Contact
 exit_impersonation: Quitter l'impersonation
 warning_impersonation: Vous impersonifiez actuellement cet utilisateur.
+title.account: Mon compte
+profile.update.success: Votre compte a bien été mis à jour.

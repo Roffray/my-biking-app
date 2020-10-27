@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\User\ProfileType;
 use App\Form\RegistrationType;
 use App\Security\LoginFormAuthenticator;
 use App\User\RegistrationHandler;
@@ -58,6 +59,22 @@ class UserController extends BaseController
 
         return $this->render('user/registration/registration.html.twig', [
             'form'  => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/account", name="account", methods={"GET"})
+     * @param Request $request
+     * @return Response
+     */
+    public function account(Request $request): Response
+    {
+        $form = $this->createForm(ProfileType::class);
+        $form->handleRequest($request);
+
+        return $this->render('user/account/account.html.twig', [
+            'form'  => $form->createView(),
+            'user'  => $this->getUser()
         ]);
     }
 }
