@@ -2,18 +2,53 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity("email")
- * @UniqueEntity("name")
+ * @UniqueEntity("email", message="registration.used.email")
+ * @UniqueEntity("name", message="registration.used.name")
+ *
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={
+ *          "get",
+ *          "put"={
+ *              "security"="is_granted('ROLE_ADMIN') or object == user",
+ *              "security_message"="Acces denied. You cannot modifiy another user's data",
+ *              "security_post_denormalize"="is_granted('ROLE_ADMIN') or (object == user and previous_object.getId() == user.getId())",
+ *              "security_post_denormalize_message"="Acces denied. You cannot modifiy another user's data"
+ *          },
+ *          "patch"={
+ *              "security"="is_granted('ROLE_ADMIN') or object == user",
+ *              "security_message"="Acces denied. You cannot modifiy another user's data",
+ *              "security_post_denormalize"="is_granted('ROLE_ADMIN') or (object == user and previous_object.getId() == user.getId())",
+ *              "security_post_denormalize_message"="Acces denied. You cannot modifiy another user's data"
+ *          }
+ *      },
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
+ *     attributes={
+ *          "pagination_items_per_page"=2,
+ *          "formats"={"jsonld", "json", "html", "jsonhal", "csv"={"text/csv"}}
+ *     },
+ * )
+ * @ApiFilter(BooleanFilter::class, properties={"isActive"})
+ * @ApiFilter(SearchFilter::class, properties={"name": "partial"})
+ * @ApiFilter(PropertyFilter::class)
  */
 class User implements UserInterface
 {
@@ -28,6 +63,8 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank
      * @Assert\Email
+     *
+     * @Groups({"user:read", "user:write", "bike:item:get"})
      */
     private $email;
 
@@ -40,12 +77,16 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Assert\NotBlank
+     *
+     * @Groups({"user:write"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank
+     *
+     * @Groups({"user:read", "user:write", "bike:item:get"})
      */
     private $name;
 
@@ -57,6 +98,10 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity=Bike::class, mappedBy="user", orphanRemoval=true, cascade={"persist"})
      * @Assert\Valid
+     *
+     * @ApiSubresource()
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private $bikes;
 

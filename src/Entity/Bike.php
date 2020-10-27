@@ -13,16 +13,36 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     collectionOperations={"get", "post"},
+ *     collectionOperations={
+ *          "get",
+ *          "post"={
+ *              "denormalization_context"={"groups"={"bike:write:create"}},
+ *              "security"="is_granted('ROLE_USER')",
+ *              "security_message"="Acces denied. You need to be authenticated to add a bike.",
+ *              "security_post_denormalize"="is_granted('MANAGE', object)",
+ *              "security_post_denormalize_message"="Acces denied. You cannot add a bike to another user."
+ *          }
+ *      },
  *     itemOperations={
- *         "get"= {
- *             "normalization_context"={"groups"={"bike:read", "bike:item:get"}}
+ *         "get"={
+ *              "normalization_context"={"groups"={"bike:read", "bike:item:get"}}
  *         },
- *         "put",
- *         "patch"
+ *         "put"={
+ *              "denormalization_context"={"groups"={"bike:write:edit"}},
+ *              "security"="is_granted('MANAGE', object)",
+ *              "security_message"="Acces denied. This bike belogs to another user.",
+ *              "security_post_denormalize"="is_granted('MANAGE', object) and is_granted('MANAGE', previous_object)",
+ *              "security_post_denormalize_message"="Acces denied. This bike belogs to another user."
+ *         },
+ *         "patch"={
+ *              "denormalization_context"={"groups"={"bike:write:edit"}},
+ *              "security"="is_granted('MANAGE', object)",
+ *              "security_message"="Acces denied. This bike belogs to another user.",
+ *              "security_post_denormalize"="is_granted('MANAGE', object) and is_granted('MANAGE', previous_object)",
+ *              "security_post_denormalize_message"="Acces denied. This bike belogs to another user."
+ *         }
  *     },
  *     normalizationContext={"groups"={"bike:read"}},
- *     denormalizationContext={"groups"={"bike:write"}},
  * )
  * @ORM\Entity(repositoryClass=BikeRepository::class)
  *
@@ -46,7 +66,7 @@ class Bike
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      *
-     * @Groups({"bike:read", "bike:write", "user:read", "user:write"})
+     * @Groups({"bike:read", "bike:write:create", "bike:write:edit", "user:read", "user:write"})
      */
     private $name;
 
@@ -55,7 +75,7 @@ class Bike
      * @ORM\JoinColumn(nullable=false)
      * @Assert\Valid
      *
-     * @Groups({"bike:read", "bike:write"})
+     * @Groups({"bike:read", "bike:write:create"})
      */
     private $user;
 
