@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Form\RegistrationType;
+use App\Security\LoginFormAuthenticator;
 use App\User\RegistrationHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -32,7 +34,7 @@ class UserController extends BaseController
      * @param Request $request
      * @return Response
      */
-    public function register(Request $request): Response
+    public function register(Request $request, GuardAuthenticatorHandler $guardAuthenticatorHandler, LoginFormAuthenticator $authenticator): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('home');
@@ -46,7 +48,12 @@ class UserController extends BaseController
 
             $this->addFlash('info', $this->translator->trans('registration_success', ['app_name' => $this->getParameter('app.name')]));
 
-            return $this->redirectToRoute("home");
+            return $guardAuthenticatorHandler->authenticateUserAndHandleSuccess(
+                $user,
+                $request,
+                $authenticator,
+                'main'
+            );
         }
 
         return $this->render('user/registration/registration.html.twig', [
