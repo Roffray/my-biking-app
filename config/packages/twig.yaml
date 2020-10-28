@@ -5,4 +5,6 @@ twig:
     globals:
         app_name: '%app.name%'
         app_locales: '%app.locales%'
-        mapbox_access_token: pk.eyJ1Ijoicm9mZnJheSIsImEiOiJja2RseThiemMxM2ZiMnhsY2NvM3F3MWFqIn0.UtRoCWfEw5e7LU_CxQSu-A
+        mapbox_access_token: '%env(MAPBOX_ACCESS_TOKEN)%'
+        thunderforest_access_token: '%env(THUNDERFOREST_ACCESS_TOKEN)%'
+        openrouteservice_access_token: '%env(OPENROUTESERVICE_ACCESS_TOKEN)%'
