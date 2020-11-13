@@ -11,7 +11,15 @@
             {{ form_label(contact_form.firstname, null) }}
         </div>
         <div class="col-md-2">
-            {{ form_widget(contact_form.firstname, {'attr': {'class': 'form-control form-control-sm'}}) }}
+            {{ form_widget(
+                contact_form.firstname,
+                {
+                    'attr': {
+                        'class': 'form-control form-control-sm',
+                        'value': app.user ? app.user.name : ""
+                    }
+                }
+            ) }}
         </div>
     </div>
 
@@ -20,7 +28,15 @@
             {{ form_label(contact_form.email, null) }}
         </div>
         <div class="col-md-2">
-            {{ form_widget(contact_form.email, {'attr': {'class': 'form-control form-control-sm'}}) }}
+            {{ form_widget(
+                contact_form.email,
+                {
+                    'attr': {
+                        'class': 'form-control form-control-sm',
+                        'value': app.user ? app.user.email : ""
+                    }
+                }
+            ) }}
         </div>
     </div>
 
