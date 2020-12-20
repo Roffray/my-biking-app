@@ -16,9 +16,9 @@ Encore
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
 
-    .addAliases({
-        'leaflet': path.resolve(__dirname, 'node_modules/leaflet/dist')
-    })
+    // .addAliases({
+    //     'leaflet': path.resolve(__dirname, 'node_modules/leaflet/dist')
+    // })
 
     /*
      * ENTRY CONFIG
