@@ -1,9 +1,27 @@
 {% extends 'base.html.twig' %}
 
+{% use '_leaflet.html.twig' %}
+
 {% block title 'Home' %}
 
 {% block page_content %}
 
-        {{ include('_leaflet.html.twig') }}
+    {% block leaflet_body %}
+        {{ parent() }}
+    {% endblock %}
 
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% block leaflet_stylesheets %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% block leaflet_javascripts %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}

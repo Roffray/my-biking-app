@@ -42,6 +42,23 @@ class UsersTest extends ApiTestCase
         ]);
     }
 
+    public function test_getUser(): void
+    {
+        $iri_user = $this->findIriBy(User::class, ['email' => 'junior@mybikingapp.fr']);
+
+        $this->client->request(Request::METHOD_GET, $iri_user);
+
+        self::assertResponseIsSuccessful();
+
+        self::assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+
+        self::assertJsonContains([
+            '@context' => '/api/contexts/User',
+            '@id' => $iri_user,
+            '@type' => 'User',
+        ]);
+    }
+
     public function test_createUser(): void
     {
         $this->client->request(Request::METHOD_POST, '/api/users', [

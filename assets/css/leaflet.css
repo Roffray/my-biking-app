@@ -1,0 +1,111 @@
+.leaflet-routing-container {
+    margin: 0px!important;
+}
+
+.leaflet-routing-geocoders {
+    width: 100%;
+}
+.leaflet-routing-alt,
+.leaflet-routing-geocoders {
+    border-bottom: none!important;
+    position: absolute;
+    top: 40px;
+    left: 0px;
+    bottom: 0px;
+    max-height: none!important;
+}
+
+/*.leaflet-routing-container input, .leaflet-routing-geocoder-result td {*/
+.leaflet-routing-geocoders input, .leaflet-routing-geocoder-result td {
+    line-height: 2!important;
+    padding: 4px;
+}
+
+.leaflet-routing-container {
+    display: none;
+}
+
+.leaflet-sidebar-header,
+.leaflet-sidebar-tabs > li.active, .leaflet-sidebar-tabs > ul > li.active {
+    background-color: #00bb00!important;
+}
+
+.itinerary-info {
+    font-weight: bold;
+}
+
+/* Handle itinerary table size */
+.leaflet-routing-alt {
+    width: 100%;
+}
+.leaflet-routing-alt tbody td:nth-child(1) {
+    width: 5%;
+}
+.leaflet-routing-alt tbody td:nth-child(2) {
+    width: 60%;
+}
+.leaflet-routing-alt tbody td:nth-child(3), .leaflet-routing-alt tbody td:nth-child(4) {
+    width: 10%;
+}
+
+/* MyBikingApp Leafelt Elevation THEME //////////////////////////////////////////////// */
+
+.mba-theme.elevation-control.elevation .background {
+    background-color: rgba(121, 200, 0, 0.2);
+}
+
+.mba-theme.elevation-control.elevation .axis line,
+.mba-theme.elevation-control.elevation .axis path {
+    stroke: #000;
+}
+
+.mba-theme.elevation-control.elevation .grid .tick line {
+    stroke: #CCC;
+}
+
+.mba-theme.elevation-control.elevation .mouse-drag {
+    fill: rgba(99, 126, 11, 0.4);
+}
+
+.mba-theme.elevation-control.elevation .elevation-toggle-icon {
+    background: url(/build/images/leaflet-elevation/elevation-mba.106f396a.svg) no-repeat center center;
+}
+
+.mba-theme.elevation-control.elevation .area {
+    fill: #79C800;
+    fill-opacity: 0.6;
+}
+
+.mba-theme.elevation-control.elevation .mouse-focus-line {
+    stroke: #101404;
+}
+
+.mba-theme.height-focus {
+    stroke: #000;
+    fill: #9CC222;
+}
+
+.mba-theme.elevation-polyline {
+    stroke: #566B13;
+}
+
+.mba-theme .elevation-summary {
+    background-color: rgba(96, 156, 5, 1);
+    padding: 6px;
+    text-shadow: none!important;
+    color: white;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.line-summary .minslope, .line-summary .maxslope {
+    display: none;
+}
+
+.line-summary > span:not(:last-child)::after {
+    content: "\0020\|\0020" !important;
+}
+
+.line-summary > span.descent:after {
+    content: none !important;
+}

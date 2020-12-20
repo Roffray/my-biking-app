@@ -11,8 +11,8 @@
         {% endif %}
 
         {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            <div class="mb-3 row justify-content-md-center font-italic">
+                {{ 'login_fully'|trans }}
             </div>
         {% endif %}
 

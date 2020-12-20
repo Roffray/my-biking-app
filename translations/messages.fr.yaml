@@ -24,8 +24,43 @@ mail.contact.title: Message reçu de
 
 signup: S'enregistrer
 signin: Se connecter
+login_fully: Vous n'êtes pas complètement connecté. Veuillez entrer votre adresse email et votre mot de passe pour vous connecter complètement.
 contact: Contact
 exit_impersonation: Quitter l'impersonation
 warning_impersonation: Vous impersonifiez actuellement cet utilisateur.
 title.account: Mon compte
 profile.update.success: Votre compte a bien été mis à jour.
+close: Fermer
+
+bike.type: Type de vélo
+bike.type.road: Vélo de route
+bike.type.regular: VTC
+bike.type.mountain: VTT
+bike.type.electric: Vélo électrique
+bike.difficulty: Difficulté
+bike.difficulty.easy: Facile
+bike.difficulty.moderate: Modérée
+bike.difficulty.hard: Difficile
+
+route.length: 'Distance : '
+route.elevation-max: 'Alt. max : '
+route.elevation-min: 'Alt. min : '
+route.ascent-total: 'Ascension : '
+route.descent-total: 'Déclin : '
+
+map.tab.road.title: Route
+map.tab.itinerary.title: Itinéraire
+map.tab.locate.title: Localisation
+map.tab.elevation.title: Elevation
+map.tab.save.title: Sauvegarder le parcours
+map.tab.load.title: Charger un parcours
+map.road.start: Départ
+map.road.end: Arrivée
+map.road.crossing-point: Point de passage
+map.error.routing: Il y a eu une erreur en calculant la route. Peut-être que la distance est trop grande. Essayez plus tard ou changez de route.
+map.route.save.success: Votre parcours a bien été sauvegardé.
+map.save.modal.title: Sauvegardez votre parcours
+map.load.modal.title: Chargez un parcours
+map.save.modal.route: Nom du parcours
+map.save.modal.save: Sauvegarder
+map.load.modal.load: Charger

@@ -1,63 +1,622 @@
-{% block stylesheets %}
+{% block leaflet_stylesheets %}
     {{ encore_entry_link_tags('leaflet') }}
 {% endblock %}
-{{ encore_entry_script_tags('leaflet') }}
 
-<div id="map" style="height:500px;"></div>
+{% block leaflet_body %}
+    <div class="modal" tabindex="-1" role="dialog" id="save-route-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'map.save.modal.title'|trans }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert" id="save-route-alert" style="display: none;"></div>
+                    <form action="" name="save-route" class="form-inline">
+                        <div class="form-group">
+                            <label class="required" for="route-name">{{ 'map.save.modal.route'|trans }}</label>
+                            <input type="text" name="route-name" id="route-name" class="form-control form-control-sm mx-sm-3" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="save-route-btn">{{ 'map.save.modal.save'|trans }}</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="load-route-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'map.load.modal.title'|trans }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert" id="load-route-alert" style="display: none;"></div>
+                    <form action="" name="load-route" class="form-inline">
+                        <div id="app-route-select"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="load-route-btn">{{ 'map.load.modal.load'|trans }}</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script type="text/javascript">
+    <div class="alert alert-danger alert-dismissibles" id="routing-error-alert" style="display: none;">
+        <span></span>
+        <button type="button" class="close" data-dismisss="alert" aria-label="Close" onclick="cleanRoutingAlert()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div id="map" style="height:500px;"></div>
+{% endblock %}
 
-    function initializeMap(latitude, longitude) {
-        var latitude = typeof latitude != "undefined" ? latitude : 48.856614;
-        var longitude = typeof longitude != "undefined" ? longitude : 2.3522219;
-        var map = L.map('map').setView([latitude, longitude], 13);
+{% block leaflet_javascripts %}
+    {{ encore_entry_script_tags('leaflet') }}
 
-        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        // }).addTo(map);
-        //
-        // L.marker([latitude, longitude]).addTo(map)
-        //     .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-        //     .openPopup();
+    <!-- d3 -->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@1.13.0/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.css" />
+    <!-- Leaflet sidebar -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-sidebar-v2@3.2.3/css/leaflet-sidebar.min.css">
 
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: '&copy; Roffray | Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            // id: 'mapbox/outdoors-v11',
-            id: 'roffray/ckdlynzgl2ky11io6knbwbaqb',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: '{{ mapbox_access_token }}'
-        }).addTo(map);
+    <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine -->
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder@1.13.0/dist/Control.Geocoder.js"></script>
+    <!-- Leaflet Routing Machine - OpenRoute Service -->
+    <script src="https://unpkg.com/@gegeweb/leaflet-routing-machine-openroute@latest/dist/leaflet-routing-openroute.min.js"></script>
+    <script src="https://unpkg.com/leaflet.elevation@0.0.3/dist/Leaflet.Elevation-0.0.2.min.js"></script>
+    <script src="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.js"></script>
+    <!-- Leaflet UI -->
+{#    <script src="https://unpkg.com/leaflet-ui@0.2.5/dist/leaflet-ui.js"></script>#}
+    <!-- Leaflet sidebar -->
+    <script src="https://unpkg.com/leaflet-sidebar-v2@3.2.3/js/leaflet-sidebar.min.js"></script>
 
-        // var geojsonFeature = {
-        //     "type": "Feature",
-        //     "properties": {
-        //         "name": "Coors Field",
-        //         "amenity": "Baseball Stadium",
-        //         "popupContent": "This is where the Rockies play!"
-        //     },
-        //     "geometry": {
-        //         "type": "Point",
-        //         // "coordinates": [-104.99404, 39.75621]
-        //         "coordinates": [51.505, -0.09]
-        //     }
-        // };
-        //
-        // L.geoJSON(geojsonFeature).addTo(map);
+    <script type="text/javascript">
 
-        return map;
-    }
+        var cleanRoutingAlert = function() {
+            $('#routing-error-alert').hide();
+            $('#routing-error-alert > span').text("");
+        }
+        $( document ).ready(function() {
+            let map = L.map('map', {
+                center: [48.856614, 2.3522219],
+                zoom: 13,
+                zoomControl: false,
+                // Leaflet-ui options
+                // zoomControl: true,
+                // searchControl: false,
+                // pegmanControl: false,
+                // locateControl: true,
+                // fullscreenControl: true,
+                // editInOSMControl: false
+            });
 
-    var map = initializeMap();
-    if ("geolocation" in navigator) {
-        let geo_options = {
-            enableHighAccuracy: true,
-            maximumAge        : 30000,
-            timeout           : 27000
-        };
-        navigator.geolocation.getCurrentPosition(function(position, geo_options) {
-            map.setView([position.coords.latitude, position.coords.longitude]);
+            L.tileLayer('https://tile.thunderforest.com/cycle/{z}/{x}/{y}{r}.png?apikey={accessToken}', {
+                attribution: '&copy; Roffray | Maps &copy; <a href="https://www.thunderforest.com">Thunderforest</a>, data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 18,
+                accessToken: '{{ thunderforest_access_token }}'
+            }).addTo(map);
+
+            // Control Zoom
+            L.control.zoom({
+                position: 'topright'
+            }).addTo(map);
+
+            // Control Scale
+            L.control.scale({
+                imperial: false,
+                position: 'bottomright'
+            }).addTo(map);
+
+            let roadContainer = L.DomUtil.create('div', 'panel-road-container');
+            roadContainer.id = 'panel-road-container';
+            let itineraryContainer = L.DomUtil.create('div', 'panel-itinerary-container');
+            itineraryContainer.id = 'panel-itinerary-container';
+            var sidebar = L.control.sidebar({
+                autopan: false,
+                closeButton: true,
+                container: 'map-sidebar',
+                position: 'left',
+            }).addTo(map);
+            /* add a new panel */
+            let panelRoadContent = {
+                id: 'road-panel',
+                tab: '<i class="fa fa-bicycle"></i>',
+                pane: roadContainer.outerHTML,
+                title: '{{ 'map.tab.road.title'|trans }}',
+                position: 'top'
+            };
+            sidebar.addPanel(panelRoadContent);
+            /* add a new panel */
+            let panelItineraryContent = {
+                id: 'itinerary-panel',
+                tab: '<i class="fa fa-road"></i>',
+                pane: itineraryContainer.outerHTML,
+                title: '{{ 'map.tab.itinerary.title'|trans }}',
+                position: 'top'
+            };
+            sidebar.addPanel(panelItineraryContent);
+            sidebar.disablePanel('itinerary-panel');
+            // buttons
+            let panelLocateButton = { // Locate user position
+                id: "locate-panel",
+                tab: '<i class="fa fa-bullseye"></i>',
+                title: '{{ 'map.tab.locate.title'|trans }}',
+                position: 'bottom',
+                button: function() {
+                    map.locate({ setView: true, maxZoom: 13 });
+                }
+            };
+            sidebar.addPanel(panelLocateButton);
+            /* add a new panel */
+            let panelElevationContent = { // Locate user position
+                id: "elevation-panel",
+                tab: '<i class="fa fa-chart-area"></i>',
+                title: '{{ 'map.tab.elevation.title'|trans }}',
+                position: 'bottom',
+                button: function() {
+                    mbaElevationControl._container.style.display === "none" ? mbaElevationControl.show() : mbaElevationControl.hide();
+                }
+            };
+            sidebar.addPanel(panelElevationContent);
+            sidebar.disablePanel('elevation-panel');
+            /* add a new panel */
+        {% if is_granted("ROLE_USER") %}
+            let panelSaveContent = { // Locate user position
+                id: "save-panel",
+                tab: '<i class="fa fa-file-download"></i>',
+                title: '{{ 'map.tab.save.title'|trans }}',
+                position: 'top',
+                button: function() {
+                    let route = routingControl.getSelectedRoute();
+                    let bike = L.DomUtil.get('select-bike').value;
+                    let difficulty = L.DomUtil.get('select-difficulty').value;
+                    console.log(route);
+                    console.log(bike);
+                    console.log(difficulty);
+
+                    // if (this._selectedRoute) {
+                    //     console.log(this._selectedRoute);
+                    //     let routeWayPoints = this._selectedRoute.waypoints;
+                    //     L.marker({ lat: routeWayPoints[0].latLng.lat, lng: routeWayPoints[0].latLng.lng }, { bounceOnAdd: true }).addTo(map);
+                    //     L.marker({ lat: routeWayPoints[1].latLng.lat, lng: routeWayPoints[1].latLng.lng }, { bounceOnAdd: true }).addTo(map);
+                    //     L.Routing.line(this._selectedRoute).addTo(map);
+                    //     // this.setAlternatives([this._selectedRoute]);
+                    // }
+                    $('#save-route-modal').modal();
+                }
+            };
+            sidebar.addPanel(panelSaveContent);
+            sidebar.disablePanel('save-panel');
+
+            let panelLoadContent = { // Locate user position
+                id: "load-panel",
+                tab: '<i class="fa fa-file-upload"></i>',
+                title: '{{ 'map.tab.load.title'|trans }}',
+                position: 'top',
+                button: function() {
+                    $('#load-route-modal').modal();
+                }
+            };
+            sidebar.addPanel(panelLoadContent);
+        {% endif %}
+
+            let wayPoints = [48.856614, 2.3522219];
+            map.on('locationfound', function(data) {
+                wayPoints = [data.latitude, data.longitude];
+                // map.setView(wayPoints);
+            }).on('locationerror', function(data) {
+                sidebar.disablePanel('locate-panel');
+            });
+            map.locate({
+                setView: true,
+                enableHighAccuracy: true
+            });
+
+            // ROUTING
+            // the plugin allow to setting the requesting format
+            // but at this time, gpx doesn't works.
+            const osrRouter = L.routing.openrouteservice("{{ openrouteservice_access_token }}", {
+                "timeout": 30 * 1000, // 30",
+                "format": "json",
+                "host": "https://api.openrouteservice.org",
+                "service": "directions",
+                "api_version": "v2",
+                "profile": "cycling-road",                  // handled by the select
+                "routingQueryParams": {
+                    "attributes": [
+                        "avgspeed",
+                        "percentage"
+                    ],
+                    "extra_info": [
+                        "steepness"
+                    ],
+                    "language": "{{ app.request.locale }}",
+                    "maneuvers": "true",
+                    "preference": "recommended",
+                    "elevation": "true",
+                    "options": {
+                        "profile_params": {
+                            "weightings": {
+                                "steepness_difficulty": 1           // handled by the select
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Geocoder to use with Geocoder and Rounting controls
+            const orsGeocoder = L.Control.Geocoder.openrouteservice("{{ openrouteservice_access_token }}", {
+                // geocodingQueryParams: {
+                //     'boundary.country': 'FR'
+                // },
+                // reverseQueryParams: {
+                //     'boundary.country': 'FR',
+                //     size: 1
+                // },
+                language: '{{ app.request.locale }}',
+            });
+
+            // Elevation
+            const mylocale = {
+                "Total Length: ": "{{ 'route.length'|trans }}",
+                "Max Elevation: ": "{{ 'route.elevation-max'|trans }}",
+                "Min Elevation: ": "{{ 'route.elevation-min'|trans }}",
+                "Total Ascent: ": "{{ 'route.ascent-total'|trans }}",
+                "Total Descent: ": "{{ 'route.descent-total'|trans }}",
+            };
+            L.registerLocale('{{ app.request.locale }}', mylocale);
+            L.setLocale('{{ app.request.locale }}');
+            const mbaElevationControl = L.control.elevation({
+                lazyLoadJS: false,
+                theme: "mba-theme",
+                detached: false,
+                responsive: false,
+                elevationDiv: "#elevation-div",
+                autohide: false,
+                collapsed: false,
+                position: "bottomright",
+                followMarker: false,
+                imperial: false,
+                reverseCoords: false,
+                summary: 'line',
+                // summary: false,
+                margins: {
+                    top: 20,
+                    right: 5,
+                    bottom: 35,
+                    left: 50
+                },
+                width: 480,
+                height: 160,
+                yAxisMin: 0,
+                legend: false,
+                slope: 'summary',
+                marker: 'position-marker',
+                markerIcon: L.divIcon({
+                    className: 'marker-position',
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                }),
+            });
+            mbaElevationControl.addTo(map);
+            mbaElevationControl.hide();
+
+            const mbaPlan = L.Routing.Plan.extend({
+                createGeocoders: function() {
+                    let container = L.Routing.Plan.prototype.createGeocoders.call(this);
+
+                    let optionsContainer = L.DomUtil.create('div', 'leaflet-routing-params-container', this._geocoderContainer);
+
+                    let bikeContainer = L.DomUtil.create('div', 'bike-container', optionsContainer);
+                    let bikeContainerTitle = L.DomUtil.create('div', 'bike-container-title', bikeContainer);
+                    let selectBikes = L.DomUtil.create('select', 'select-bike', bikeContainer);
+                    let optionRoadBike = L.DomUtil.create('option', '', selectBikes);
+                    let optionRegularBike = L.DomUtil.create('option', '', selectBikes);
+                    let optionMountainBike = L.DomUtil.create('option', '', selectBikes);
+                    let optionElectricBike = L.DomUtil.create('option', '', selectBikes);
+
+                    selectBikes.id = 'select-bike';
+                    bikeContainerTitle.innerHTML = '{{ 'bike.type'|trans }} :';
+                    optionRoadBike.setAttribute('value', 'cycling-road');
+                    optionRoadBike.text = '{{ 'bike.type.road'|trans }}';
+                    optionRegularBike.setAttribute('value', 'cycling-regular');
+                    optionRegularBike.text = '{{ 'bike.type.regular'|trans }}';
+                    optionMountainBike.setAttribute('value', 'cycling-mountain');
+                    optionMountainBike.text = '{{ 'bike.type.mountain'|trans }}';
+                    optionElectricBike.setAttribute('value', 'cycling-electric');
+                    optionElectricBike.text = '{{ 'bike.type.electric'|trans }}';
+
+                    let difficultyContainer = L.DomUtil.create('div', 'difficulty-container', optionsContainer);
+                    let difficultyContainerTitle = L.DomUtil.create('div', 'difficulty-container-title', difficultyContainer);
+                    let selectDifficulty = L.DomUtil.create('select', 'select-difficulty', difficultyContainer);
+                    let optionEasyDifficulty = L.DomUtil.create('option', '', selectDifficulty);
+                    let optionModerateDifficulty = L.DomUtil.create('option', '', selectDifficulty);
+                    let optionHardDifficulty = L.DomUtil.create('option', '', selectDifficulty);
+
+                    selectDifficulty.id = 'select-difficulty';
+                    difficultyContainerTitle.innerHTML = '{{ 'bike.difficulty'|trans }} :';
+                    optionEasyDifficulty.setAttribute('value', '1');
+                    optionEasyDifficulty.text = '{{ 'bike.difficulty.easy'|trans }}';
+                    optionModerateDifficulty.setAttribute('value', '2');
+                    optionModerateDifficulty.text = '{{ 'bike.difficulty.moderate'|trans }}';
+                    optionHardDifficulty.setAttribute('value', '3');
+                    optionHardDifficulty.text = '{{ 'bike.difficulty.hard'|trans }}';
+
+                    L.DomUtil.addClass(selectDifficulty, 'form-control');
+                    L.DomUtil.addClass(selectDifficulty, 'form-control-sm');
+
+                    let onSelectBikeChange = function(value) {
+                        L.extend(osrRouter.options, {
+                            "profile": value
+                        });
+                    }
+                    onSelectBikeChange(selectBikes.value);
+                    L.DomEvent.on(selectBikes, 'change', (e) => {
+                        onSelectBikeChange(e.target.value);
+                        routingControl.route();
+                    });
+
+                    let onSelectDifficultyChange = function(value) {
+                        L.extend(osrRouter.options.routingQueryParams.options, {
+                            "profile_params": {
+                                "weightings": {
+                                    "steepness_difficulty": value
+                                }
+                            }
+                        });
+                    }
+                    onSelectDifficultyChange(selectDifficulty.value);
+                    L.DomEvent.on(selectDifficulty, 'change', (e) => {
+                        onSelectDifficultyChange(e.target.value);
+                        routingControl.route();
+                    });
+
+                    L.DomUtil.addClass(optionsContainer, 'mt-4');
+                    L.DomUtil.addClass(selectBikes, 'form-control');
+                    L.DomUtil.addClass(selectBikes, 'form-control-sm');
+                    L.DomUtil.addClass(selectBikes, 'mb-2');
+
+                    let roadContainer = L.DomUtil.get('panel-road-container');
+                    roadContainer.appendChild(container);
+
+                    // We have to return something
+                    return L.DomUtil.create('div');
+                    // return container;
+                }
+            });
+            const plan = new mbaPlan(wayPoints, {
+                geocoder: orsGeocoder,
+                routeWhileDragging: true,
+                reverseWaypoints: true,
+                language: '{{ app.request.locale }}',
+                geocoderPlaceholder: function(waypointIndex, numberWaypoints) {
+                    if (waypointIndex == 0)
+                        return "{{ 'map.road.start'|trans }}";
+                    if (waypointIndex == (numberWaypoints - 1))
+                        return "{{ 'map.road.end'|trans }}";
+                    return "{{ 'map.road.crossing-point'|trans }} " + (waypointIndex);
+                },
+                // showAlternatives: true,
+                // maxGeocoderTolerance: 200,
+                // dragStyles: [
+                //     { color: 'black', opacity: 0.15, weight: 9 },
+                //     { color: 'white', opacity: 0.8, weight: 6 },
+                //     { color: 'rgb(173, 53, 37)', opacity: 1, weight: 2, dashArray: '7,12' }
+                // ],
+                // createMarker: createMarker,
+            })/*.on('waypointgeocoded', wpGeocoded)*/
+            ;
+
+            const mbaRoutingControl = L.Routing.Control.extend({
+               getSelectedRoute: function() {
+                   return this._selectedRoute || null;
+               }
+            });
+            // const routingControl = L.Routing.control({
+            const routingControl = new mbaRoutingControl({
+                // position: 'topleft',
+                detached: true,
+                // itineraryDiv: 'itinerary-pane',
+                // geocodersDiv: 'geocoders-pane',
+                waypoints: [
+                    L.latLng(48.856614, 2.3522219),
+                    L.latLng(48.9484, 2.2513)
+                ],
+                routeWhileDragging: true,
+                router: osrRouter,
+                formatter: L.routing.formatterORS({
+                    language: '{{ app.request.locale }}',     // language of instructions & control ui
+                    steptotext: true,   // force using internal formatter instead of ORS instructions
+                }),
+                // geocoder: L.Control.Geocoder.nominatim()
+                plan: plan,
+                summaryTemplate: '<div class="itinerary-info">{distance} - {time}</div>',
+            })
+            .on('routeselected', function(e) {
+                // let layer = this.getLine();
+                let route = e.route,
+                    data = L.polyline(route.coordinates).toGeoJSON();
+
+                mbaElevationControl.clear();
+                try {
+                    mbaElevationControl.addData(data);
+                } catch (e) {
+                    console.log(e);
+                }
+
+                let altContainer = $('.leaflet-routing-alternatives-container');
+                if (altContainer.parent()[0].id != 'altContainer.parent()[0].id') {
+                    let itineraryContainer = L.DomUtil.get('panel-itinerary-container');
+                    itineraryContainer.appendChild(altContainer[0]);
+                    sidebar.enablePanel('itinerary-panel');
+                    sidebar.enablePanel('elevation-panel');
+                    {% if is_granted("ROLE_USER") %}
+                    sidebar.enablePanel('save-panel');
+                    {% endif %}
+                }
+
+                this._selectedRoute = route;
+            })
+            // .on('routesfound', function (e) {
+            //     console.log(e);
+            // })
+            .on('waypointschanged', function(e) {
+                $('#routing-error-alert').hide();
+                $('#routing-error-alert > span').text("");
+                if (!plan.isReady()) {
+                    mbaElevationControl.clear();
+                    mbaElevationControl.hide();
+                    sidebar.disablePanel('itinerary-panel');
+                    sidebar.disablePanel('elevation-panel');
+                    {% if is_granted("ROLE_USER") %}
+                    sidebar.disablePanel('save-panel');
+                    {% endif %}
+                }
+                this._selectedRoute = null;
+            })
+            .on('routingerror', function (e) {
+                $('#routing-error-alert > span').text("{{ 'map.error.routing'|trans }}");
+                $('#routing-error-alert').show();
+                mbaElevationControl.clear();
+                mbaElevationControl.hide();
+                sidebar.disablePanel('itinerary-panel');
+                sidebar.disablePanel('elevation-panel');
+                {% if is_granted("ROLE_USER") %}
+                sidebar.disablePanel('save-panel');
+                {% endif %}
+            })
+            ;
+            routingControl.addTo(map);
+
+        {% if is_granted("ROLE_USER") %}
+            // saveRoute is the function that will handle the save if the route from the modal event trigger (click, submit)
+            $('[name=save-route]').submit((e) => {
+                e.preventDefault();
+                saveRoute();
+            });
+            $('#save-route-btn').click((e) => {
+                e.preventDefault();
+                saveRoute();
+            });
+            $('#save-route-modal').on('hidden.bs.modal', function (e) {
+                $('#save-route-alert').hide();
+            })
+
+            function saveRoute() {
+                let name = L.DomUtil.get('route-name').value;
+                let route = routingControl.getSelectedRoute();
+                let profile = L.DomUtil.get('select-bike').value;
+                let difficulty = L.DomUtil.get('select-difficulty').value;
+                axios
+                    .post(
+                        "{{ path('api_routes_post_collection', {_format: 'jsonld'}) }}",
+                        {
+                            user: '/api/users/{{ app.user.id }}',
+                            name: name,
+                            data: route,
+                            search: {
+                                "profile": profile,
+                                "difficulty": difficulty
+                            }
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/ld+json'
+                            }
+                        }
+                    )
+                    .then(response => {
+                        $('#save-route-alert')
+                            .removeClass('alert-danger')
+                            .addClass('alert-success')
+                            .text("{{ 'map.route.save.success'|trans }}")
+                        ;
+                        $('#save-route-alert').show();
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error.response.data);
+                        $('#save-route-alert')
+                            .removeClass('alert-success')
+                            .addClass('alert-danger')
+                        ;
+                        $.each(error.response.data.violations, (index, violation) => {
+                            $('#save-route-alert').text(violation.message);
+                        });
+                        $('#save-route-alert').show();
+                    })
+                ;
+            }
+
+            let routeSelected = null;
+            window.addEventListener('route-selected', (event) => {
+                routeSelected = event.detail;
+            });
+
+            $('#load-route-btn').click((e) => {
+                axios.get(routeSelected+'.jsonld')
+                    .then((response) => {
+                        let search = response.data.search;
+                        $("#select-bike").val(search.profile);
+                        $("#select-difficulty").val(search.difficulty);
+                        L.extend(osrRouter.options, {
+                            "profile": search.profile
+                        });
+                        L.extend(osrRouter.options.routingQueryParams.options, {
+                            "profile_params": {
+                                "weightings": {
+                                    "steepness_difficulty": search.difficulty
+                                }
+                            }
+                        });
+
+                        let data = response.data.data;
+                        data.inputWaypoints[0].latLng = new L.latLng(
+                            data.inputWaypoints[0].latLng.lat,
+                            data.inputWaypoints[0].latLng.lng,
+                            data.inputWaypoints[0].latLng.alt,
+                        );
+                        data.inputWaypoints[1].latLng = new L.latLng(
+                            data.inputWaypoints[1].latLng.lat,
+                            data.inputWaypoints[1].latLng.lng,
+                            data.inputWaypoints[1].latLng.alt,
+                        );
+
+                        // We prevent the automatic routing when setting the waypoints.
+                        routingControl.options.autoRoute = false;
+                        plan.setWaypoints(data.inputWaypoints);
+                        routingControl.setAlternatives([data]);
+                        routingControl.options.autoRoute = true;
+
+                        $('#load-route-modal').modal('toggle');
+                    });
+            });
+        {% endif %}
         });
-    }
-</script>
+    </script>
+
+    {% if is_granted("ROLE_USER") %}
+        <script type="text/javascript">
+            window.userid = '{{ app.user.id }}';
+        </script>
+        {{ encore_entry_script_tags('route-select') }}
+        {{ encore_entry_link_tags('route-select') }}
+    {% endif %}
+{% endblock %}

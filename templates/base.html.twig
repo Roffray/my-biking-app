@@ -42,6 +42,10 @@
         </div>
 
         {% block javascripts %}
+            <script type="text/javascript">
+                window.locale = '{{ app.request.locale }}';
+            </script>
+
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     {% endblock %}

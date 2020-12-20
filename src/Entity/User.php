@@ -86,7 +86,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank
      *
-     * @Groups({"user:read", "user:write", "bike:item:get"})
+     * @Groups({"user:read", "user:write", "bike:item:get", "route:item:get"})
      */
     private $name;
 
@@ -110,10 +110,18 @@ class User implements UserInterface
      */
     private $apiTokens;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Route::class, mappedBy="user", orphanRemoval=true)
+     *
+     * @ApiSubresource()
+     */
+    private $routes;
+
     public function __construct()
     {
         $this->bikes = new ArrayCollection();
         $this->apiTokens = new ArrayCollection();
+        $this->routes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -274,6 +282,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($apiToken->getUser() === $this) {
                 $apiToken->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Route[]
+     */
+    public function getRoutes(): Collection
+    {
+        return $this->routes;
+    }
+
+    public function addRoute(Route $route): self
+    {
+        if (!$this->routes->contains($route)) {
+            $this->routes[] = $route;
+            $route->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoute(Route $route): self
+    {
+        if ($this->routes->removeElement($route)) {
+            // set the owning side to null (unless already changed)
+            if ($route->getUser() === $this) {
+                $route->setUser(null);
             }
         }
 

@@ -3,72 +3,21 @@
 {% block title 'title.account'|trans %}
 
 {% block page_content %}
-    <h1 class="h3 my-3 font-weight-normal d-flex justify-content-center">{{ 'title.account'|trans }}</h1>
-
-    <ul class="nav nav-tabs justify-content-md-center" style="margin-bottom: 1em;">
-        <li class="nav-item">
-            <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="password-tab" data-toggle="tab" href="#password" role="tab" aria-controls="password" aria-selected="false">Password</a>
-        </li>
-    </ul>
-
-    <div class="tab-content">
-        <div class="tab-pane show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            {{ include('user/account/_profile.html.twig') }}
-        </div>
-        <div class="tab-pane" id="password" role="tabpanel" aria-labelledby="password-tab">
-        </div>
-    </div>
+{#    <link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />#}
+{#    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />#}
+{#    <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>#}
+{#    <!-- Leaflet Routing Machine -->#}
+{#    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>#}
+    <div id="app-account"></div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
 
-    <script type="application/javascript">
-        function handleProfileSubmit() {
-            $('#form-profile-alert')
-                .removeClass('alert-success')
-                .removeClass('alert-danger')
-                .text("")
-            ;
-
-            axios
-                .patch(
-                    "{{ path('api_users_patch_item', {id: app.user.id, _format: 'jsonld'}) }}",
-                    {
-                        email: $('#profile_email').val(),
-                        name: $('#profile_name').val()
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'application/merge-patch+json'
-                        }
-                    }
-                ).then(response => {
-                    $('#form-profile-alert')
-                        .addClass('alert-success')
-                        .text("{{ 'profile.update.success'|trans }}")
-                    ;
-                    console.log(response.data);
-                })
-                .catch(error => {
-                    console.log(error.response.data);
-                    $('#form-profile-alert').addClass('alert-danger');
-                    $.each(error.response.data.violations, (index, violation) => {
-                        $('#form-profile-alert').text(violation.message);
-                    });
-                })
-                .finally(() => {
-                    console.log("done");
-                })
-            ;
-        }
-
-        $('[name=profile]').submit((e) => {
-            e.preventDefault();
-            handleProfileSubmit();
-        });
+    <script type="text/javascript">
+        window.userid = '{{ app.user.id }}';
     </script>
+
+    {{ encore_entry_script_tags('account') }}
+    {{ encore_entry_link_tags('account') }}
 {% endblock %}

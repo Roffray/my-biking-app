@@ -17,6 +17,13 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+#        api:
+#            pattern: ^/api
+#            guard:
+#                authenticators:
+#                    - App\Security\ApiTokenAuthenticator
+#            user_checker: App\Security\UserChecker
+#            stateless: true
         main:
             anonymous: true
             lazy: true
@@ -24,6 +31,8 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+                    #  App\Security\ApiTokenAuthenticator
+                # entry_point: App\Security\LoginFormAuthenticator
             user_checker: App\Security\UserChecker
             # custom_authenticators:
             #     - App\Security\LoginFormAuthenticator
@@ -51,10 +60,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/(%app.locales_pattern%)/user/account, role: ROLE_USER }
-#        - { path: ^/(%app.locales_pattern%)/user, role: IS_AUTHENTICATED_ANONYMOUSLY && !IS_AUTHENTICADED_FULLY }
+        - { path: ^/(%app.locales_pattern%)/admin, roles: ROLE_ADMIN }
+        - { path: ^/(%app.locales_pattern%)/user/account, role: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/(%app.locales_pattern%)/user, role: IS_AUTHENTICATED_ANONYMOUSLY && !IS_AUTHENTICADED_FULLY }
 
     role_hierarchy:
         ROLE_ADMIN: [ROLE_ALLOWED_TO_SWITCH]

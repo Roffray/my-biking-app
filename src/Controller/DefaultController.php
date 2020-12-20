@@ -24,6 +24,9 @@ class DefaultController extends AbstractController {
 
     /**
      * @Route("/", name="home", methods={"GET"})
+     *
+     * @param Request $request
+     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -32,6 +35,10 @@ class DefaultController extends AbstractController {
 
     /**
      * @Route("/contact", name="contact", methods={"GET", "POST"})
+     *
+     * @param Request $request
+     * @param TranslatorInterface $translator
+     * @return Response
      */
     public function contact(Request $request, TranslatorInterface $translator): Response
     {

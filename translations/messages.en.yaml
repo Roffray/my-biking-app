@@ -24,8 +24,43 @@ mail.contact.title: Incoming message from
 
 signup: Sign up
 signin: Sign in
+login_fully: You are not fully logged in. Enter your email address and your password to be fully logged in.
 contact: Contact
 exit_impersonation: Exit impersonation
 warning_impersonation: You are currently switched to this user.
 title.account: My account
 profile.update.success: Your account has been successfully updated.
+close: Close
+
+bike.type: Bike type
+bike.type.road: Road bike
+bike.type.regular: Regular bike
+bike.type.mountain: Moutain bike
+bike.type.electric: Electrical bike
+bike.difficulty: Difficulty
+bike.difficulty.easy: Easy
+bike.difficulty.moderate: Moderate
+bike.difficulty.hard: Hard
+
+route.length: 'Distance : '
+route.elevation-max: 'Alt. max : '
+route.elevation-min: 'Alt. min : '
+route.ascent-total: 'Ascent : '
+route.descent-total: 'Descent : '
+
+map.tab.road.title: Road
+map.tab.itinerary.title: Itinerary
+map.tab.locate.title: Locate
+map.tab.elevation.title: Elevation
+map.tab.save.title: Save the route
+map.tab.load.title: Load a route
+map.road.start: Departure
+map.road.end: Arrival
+map.road.crossing-point: Crossing point
+map.error.routing: There was an error calculating the route. Maybe the distance is too high. Try again later or change your route.
+map.route.save.success: Your route has been saved.
+map.save.modal.title: Save your route
+map.load.modal.title: Load a route
+map.save.modal.route: Route name
+map.save.modal.save: Save
+map.load.modal.load: Load

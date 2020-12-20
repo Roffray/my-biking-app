@@ -30,7 +30,11 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('leaflet', './assets/js/leaflet.js')
+    .addEntry('leaflet', [
+        './assets/js/leaflet.js',
+    ])
+    .addEntry('account', './assets/js/vue/account.js')
+    .addEntry('route-select', './assets/js/vue/route-select.js')
     // Green theme vendors
     //.addEntry('owl.carousel', './assets/vendor/owl.carousel/owl.carousel.js')
 
@@ -67,6 +71,18 @@ Encore
 
     // enables Sass/SCSS support
     .enableSassLoader()
+
+    .enableVueLoader()
+
+    // .addRule({
+    //     test: /\.vue$/,
+    //     loader: 'vue-loader',
+    // })
+    .addRule({
+        resourceQuery: /blockType=i18n/,
+        type: 'javascript/auto',
+        loader: '@kazupon/vue-i18n-loader',
+    })
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
