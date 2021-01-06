@@ -10,7 +10,7 @@
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@gegeweb/leaflet-routing-machine-openroute": "^0.1.10",
     "@raruto/leaflet-elevation": "^1.4.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "d3": "^6.2.0",
     "jquery": "^3.5.1",
     "leaflet": "^1.7.1",
